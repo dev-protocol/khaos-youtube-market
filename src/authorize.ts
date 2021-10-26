@@ -6,7 +6,7 @@ export const authorize: FunctionAuthorizer = async ({ message, secret }) => {
 	return postViewerPermission(message, secret)
 }
 
-type GraphQLResponse = {
+type YoutubeAPIResponse = {
 	readonly items: readonly [{ readonly id: string }]
 }
 
@@ -26,10 +26,10 @@ async function postViewerPermission(
 
 async function post(
 	token: string
-): Promise<GraphQLResponse | Error> {
+): Promise<YoutubeAPIResponse | Error> {
 	const youtubeDataApiUrl = `https://www.googleapis.com/youtube/v3/channels?part=id&mine=true&access_token=${token}`
 	return bent(youtubeDataApiUrl, 'json')('')
-		.then((res) => res as unknown as GraphQLResponse)
+		.then((res) => res as unknown as YoutubeAPIResponse)
 		.catch((err: Error) => err)
 	// return fetch(youtubeDataApiUrl)
 	// 	.then(response => response.json())
