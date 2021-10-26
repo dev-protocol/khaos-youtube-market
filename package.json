@@ -1,0 +1,77 @@
+{
+	"name": "khaos-github-market",
+	"private": true,
+	"description": "Khaos Functions for GitHub Market",
+	"scripts": {
+		"test": "ava",
+		"build": "tsc",
+		"watch": "tsc -w",
+		"pretest": "yarn build",
+		"prebuild": "rimraf dist bundled",
+		"postbuild": "rollup -c",
+		"predeploy": "yarn build",
+		"lint": "yarn lint:eslint && yarn lint:format",
+		"lint:eslint": "eslint . --ext .ts,.js --fix",
+		"lint:format": "prettier --write '**/*.{ts,js,json,md,yml}'",
+		"deploy": "curl -X POST -F file=@bundled/index.js 'https://ipfs.infura.io:5001/api/v0/add?wrap-with-directory=true'",
+		"prepare": "husky install"
+	},
+	"dependencies": {
+		"@devprotocol/khaos-core": "1.5.1",
+		"bent": "7.3.12",
+		"dotenv": "^10.0.0",
+		"ethers": "5.4.7",
+		"node-fetch": "^2.6.1",
+		"proxyquire": "^2.1.3",
+		"ramda": "0.27.1"
+	},
+	"devDependencies": {
+		"@ava/typescript": "1.1.1",
+		"@rollup/plugin-commonjs": "21.0.0",
+		"@rollup/plugin-node-resolve": "13.0.5",
+		"@types/bent": "7.3.2",
+		"@types/node": "14.17.27",
+		"@types/ramda": "0.27.45",
+		"@types/sinon": "10.0.4",
+		"@typescript-eslint/eslint-plugin": "5.0.0",
+		"@typescript-eslint/parser": "5.0.0",
+		"ava": "3.15.0",
+		"eslint": "7.32.0",
+		"eslint-config-prettier": "8.3.0",
+		"eslint-plugin-functional": "3.7.2",
+		"esm": "3.2.25",
+		"husky": "7.0.2",
+		"prettier": "2.4.1",
+		"rimraf": "3.0.2",
+		"rollup": "2.58.0",
+		"rollup-plugin-terser": "7.0.2",
+		"sinon": "11.1.2",
+		"typescript": "4.4.4"
+	},
+	"ava": {
+		"require": [
+			"esm"
+		],
+		"files": [
+			"**/*.test.ts"
+		],
+		"typescript": {
+			"rewritePaths": {
+				"src/": "dist/"
+			}
+		}
+	},
+	"version": "1.0.0",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dev-protocol/khaos-github-market.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/dev-protocol/khaos-github-market/issues"
+	},
+	"homepage": "https://github.com/dev-protocol/khaos-github-market#readme"
+}
