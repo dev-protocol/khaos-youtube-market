@@ -18,11 +18,11 @@
 	},
 	"dependencies": {
 		"@devprotocol/khaos-core": "1.5.1",
+		"@rollup/plugin-json": "^4.1.0",
 		"bent": "7.3.12",
 		"dotenv": "^10.0.0",
 		"ethers": "5.4.7",
 		"node-fetch": "^2.6.1",
-		"proxyquire": "^2.1.3",
 		"ramda": "0.27.1"
 	},
 	"devDependencies": {
