@@ -8,7 +8,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { authorize } from './authorize'
 
 let get: sinon.SinonStub<
-	readonly [url: string, data?: any, config?: AxiosRequestConfig | undefined],
+	[url: string, data?: any, config?: AxiosRequestConfig | undefined],
 	Promise<unknown>
 >
 
