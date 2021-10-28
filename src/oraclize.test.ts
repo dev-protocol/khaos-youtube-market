@@ -8,20 +8,20 @@ import { PublicSignatureOptions, QueryData } from '@devprotocol/khaos-core'
 //success
 test('Returns success when the assert is passed; same repo, same account', async (t) => {
 	const signatureOptions: PublicSignatureOptions = {
-		message: 'user/repository',
-		id: 'github-market',
+		message: 'channel-id',
+		id: 'youtube-market',
 		address: '0x1234',
 	}
 	const query: QueryData = {
 		publicSignature: 'dummy-publicSignature',
-		allData: { githubRepository: 'user/repository', account: '0x1234' } as any,
+		allData: { youtubeChannel: 'channel-id', account: '0x1234' } as any,
 		transactionhash: 'dummy-transaction-hash',
 	}
 	const data = await Promise.all([
 		oraclize({ signatureOptions, query, network: 'mainnet' }),
 	])
 	data.forEach((res) => {
-		t.is(res!.message, 'user/repository')
+		t.is(res!.message, 'channel-id')
 		t.is(res!.status, 0)
 		t.is(res!.statusMessage, 'success')
 	})
@@ -30,12 +30,12 @@ test('Returns success when the assert is passed; same repo, same account', async
 test('Returns failure when the assert is not passed; different repo, same account', async (t) => {
 	const signatureOptions: PublicSignatureOptions = {
 		message: 'user/REPOSITORY',
-		id: 'github-market',
+		id: 'youtube-market',
 		address: '0x1234',
 	}
 	const query: QueryData = {
 		publicSignature: 'dummy-publicSignature',
-		allData: { githubRepository: 'user/repository', account: '0x1234' } as any,
+		allData: { youtubeChannel: 'channel-id', account: '0x1234' } as any,
 		transactionhash: 'dummy-transaction-hash',
 	}
 	const data = await Promise.all([
@@ -50,20 +50,20 @@ test('Returns failure when the assert is not passed; different repo, same accoun
 
 test('Returns failure when the assert is not passed; same repo, different account', async (t) => {
 	const signatureOptions: PublicSignatureOptions = {
-		message: 'user/repository',
-		id: 'github-market',
+		message: 'channel-id',
+		id: 'youtube-market',
 		address: '0x12345',
 	}
 	const query: QueryData = {
 		publicSignature: 'dummy-publicSignature',
-		allData: { githubRepository: 'user/repository', account: '0x1234' } as any,
+		allData: { youtubeChannel: 'channel-id', account: '0x1234' } as any,
 		transactionhash: 'dummy-transaction-hash',
 	}
 	const data = await Promise.all([
 		oraclize({ signatureOptions, query, network: 'mainnet' }),
 	])
 	data.forEach((res) => {
-		t.is(res!.message, 'user/repository')
+		t.is(res!.message, 'channel-id')
 		t.is(res!.status, 2)
 		t.is(res!.statusMessage, 'error: test1 = true, test2 = false')
 	})
@@ -71,24 +71,21 @@ test('Returns failure when the assert is not passed; same repo, different accoun
 
 test('Returns failure when the assert is not passed; different repo, different account', async (t) => {
 	const signatureOptions: PublicSignatureOptions = {
-		message: 'user/REPOSITORY',
-		id: 'github-market',
+		message: 'CHANNEL-ID',
+		id: 'youtube-market',
 		address: '0x12345',
 	}
 	const query: QueryData = {
 		publicSignature: 'dummy-publicSignature',
-		allData: { githubRepository: 'user/repository', account: '0x1234' } as any,
+		allData: { youtubeChannel: 'channel-id', account: '0x1234' } as any,
 		transactionhash: 'dummy-transaction-hash',
 	}
 	const data = await Promise.all([
 		oraclize({ signatureOptions, query, network: 'mainnet' }),
 	])
 	data.forEach((res) => {
-		t.is(res!.message, 'user/REPOSITORY')
+		t.is(res!.message, 'CHANNEL-ID')
 		t.is(res!.status, 2)
-		t.is(
-			res!.statusMessage,
-			'error: test1 = false, test2 = false'
-		)
+		t.is(res!.statusMessage, 'error: test1 = false, test2 = false')
 	})
 })
