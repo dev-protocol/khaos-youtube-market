@@ -18,9 +18,7 @@ test('Returns success when the assert is passed; same repo, same account', async
 		transactionhash: 'dummy-transaction-hash',
 	}
 	const data = await Promise.all([
-		oraclize({ signatureOptions, query, network: 'ropsten' }),
-		oraclize({ signatureOptions, query, network: 'arbitrum-rinkeby' }),
-		oraclize({ signatureOptions, query, network: 'arbitrum-one' }),
+		oraclize({ signatureOptions, query, network: 'mainnet' }),
 	])
 	data.forEach((res) => {
 		t.is(res!.message, 'user/repository')
@@ -41,14 +39,12 @@ test('Returns failure when the assert is not passed; different repo, same accoun
 		transactionhash: 'dummy-transaction-hash',
 	}
 	const data = await Promise.all([
-		oraclize({ signatureOptions, query, network: 'ropsten' }),
-		oraclize({ signatureOptions, query, network: 'arbitrum-rinkeby' }),
-		oraclize({ signatureOptions, query, network: 'arbitrum-one' }),
+		oraclize({ signatureOptions, query, network: 'mainnet' }),
 	])
 	data.forEach((res) => {
 		t.is(res!.message, 'user/REPOSITORY')
 		t.is(res!.status, 2)
-		t.is(res!.statusMessage, 'error: test1 = false, test2 = true, test3 = true')
+		t.is(res!.statusMessage, 'error: test1 = false, test2 = true')
 	})
 })
 
@@ -64,14 +60,12 @@ test('Returns failure when the assert is not passed; same repo, different accoun
 		transactionhash: 'dummy-transaction-hash',
 	}
 	const data = await Promise.all([
-		oraclize({ signatureOptions, query, network: 'ropsten' }),
-		oraclize({ signatureOptions, query, network: 'arbitrum-rinkeby' }),
-		oraclize({ signatureOptions, query, network: 'arbitrum-one' }),
+		oraclize({ signatureOptions, query, network: 'mainnet' }),
 	])
 	data.forEach((res) => {
 		t.is(res!.message, 'user/repository')
 		t.is(res!.status, 2)
-		t.is(res!.statusMessage, 'error: test1 = true, test2 = false, test3 = true')
+		t.is(res!.statusMessage, 'error: test1 = true, test2 = false')
 	})
 })
 
@@ -87,16 +81,14 @@ test('Returns failure when the assert is not passed; different repo, different a
 		transactionhash: 'dummy-transaction-hash',
 	}
 	const data = await Promise.all([
-		oraclize({ signatureOptions, query, network: 'ropsten' }),
-		oraclize({ signatureOptions, query, network: 'arbitrum-rinkeby' }),
-		oraclize({ signatureOptions, query, network: 'arbitrum-one' }),
+		oraclize({ signatureOptions, query, network: 'mainnet' }),
 	])
 	data.forEach((res) => {
 		t.is(res!.message, 'user/REPOSITORY')
 		t.is(res!.status, 2)
 		t.is(
 			res!.statusMessage,
-			'error: test1 = false, test2 = false, test3 = true'
+			'error: test1 = false, test2 = false'
 		)
 	})
 })
