@@ -1,7 +1,7 @@
 {
-	"name": "khaos-github-market",
+	"name": "khaos-youtube-market",
 	"private": true,
-	"description": "Khaos Functions for GitHub Market",
+	"description": "Khaos Functions for YouTube Market",
 	"scripts": {
 		"test": "ava",
 		"build": "tsc",
