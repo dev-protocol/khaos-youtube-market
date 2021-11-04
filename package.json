@@ -57,7 +57,8 @@
 		"typescript": {
 			"rewritePaths": {
 				"src/": "dist/"
-			}
+			},
+			"compile": false
 		}
 	},
 	"version": "1.0.0",
