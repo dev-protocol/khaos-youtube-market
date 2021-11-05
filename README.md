@@ -20,9 +20,7 @@ Edit the file in the `src` directory. You have to edit the following files:
 - src/abi.ts
 - src/addresses.ts
 - src/authorize.ts
-- src/event.ts
 - src/oraclize.ts
-- src/pack.ts
 
 And update the tests.
 
@@ -38,7 +36,7 @@ yarn build
 
 A subdirectory named `bundled` is added to this directory, and `bundled/index.js` is generated.
 
-Then add `bundled/index.js` to IPFS. You can add files to IPFS node provided by Infura using the following command. (Use curl)
+Then add `bundled/index.js` to the IPFS. You can add files to the IPFS node provided by Infura using the following command. (Use curl)
 
 ```bash
 yarn deploy
@@ -49,4 +47,4 @@ yarn deploy
 
 Your function has been deployed!
 
-Submit the `IPFS_HASH_FOR_DIRECTORY` part to [Khaos Registry](https://github.com/dev-protocol/khaos-registry).
+Submit `IPFS_HASH_FOR_DIRECTORY` to the Khaos Registry.

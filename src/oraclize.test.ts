@@ -1,24 +1,91 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion*/
+/* eslint-disable functional/no-let */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable functional/prefer-readonly-type */
 import test from 'ava'
 import { oraclize } from './oraclize'
+import { PublicSignatureOptions, QueryData } from '@devprotocol/khaos-core'
 
-test('oraclize is executed.', async (t) => {
-	const res = await oraclize({
-		signatureOptions: { address: 'account', id: 'signature', message: 'data' },
-		query: { allData: '{}', publicSignature: 'dummy-public-signature' } as any,
-		network: 'mainnet',
+//success
+test('Returns success when the assert is passed; same repo, same account', async (t) => {
+	const signatureOptions: PublicSignatureOptions = {
+		message: 'channel-id',
+		id: 'youtube-market',
+		address: '0x1234',
+	}
+	const query: QueryData = {
+		publicSignature: 'dummy-publicSignature',
+		allData: { youtubeChannel: 'channel-id', account: '0x1234' } as any,
+		transactionhash: 'dummy-transaction-hash',
+	}
+	const data = await Promise.all([
+		oraclize({ signatureOptions, query, network: 'mainnet' }),
+	])
+	data.forEach((res) => {
+		t.is(res!.message, 'channel-id')
+		t.is(res!.status, 0)
+		t.is(res!.statusMessage, 'success')
 	})
-	t.is(res!.message, 'data')
-	t.is(res!.status, 0)
-	t.is(res!.statusMessage, 'mainnet dummy-public-signature')
 })
 
-test('returns `empty` as the message property when the passed signatureOptions is undefined', async (t) => {
-	const res = await oraclize({
-		query: { allData: '{}', publicSignature: 'dummy-public-signature' } as any,
-		network: 'mainnet',
+test('Returns failure when the assert is not passed; different repo, same account', async (t) => {
+	const signatureOptions: PublicSignatureOptions = {
+		message: 'user/REPOSITORY',
+		id: 'youtube-market',
+		address: '0x1234',
+	}
+	const query: QueryData = {
+		publicSignature: 'dummy-publicSignature',
+		allData: { youtubeChannel: 'channel-id', account: '0x1234' } as any,
+		transactionhash: 'dummy-transaction-hash',
+	}
+	const data = await Promise.all([
+		oraclize({ signatureOptions, query, network: 'mainnet' }),
+	])
+	data.forEach((res) => {
+		t.is(res!.message, 'user/REPOSITORY')
+		t.is(res!.status, 2)
+		t.is(res!.statusMessage, 'error: test1 = false, test2 = true')
 	})
-	t.is(res!.message, 'empty')
-	t.is(res!.status, 0)
-	t.is(res!.statusMessage, 'mainnet dummy-public-signature')
+})
+
+test('Returns failure when the assert is not passed; same repo, different account', async (t) => {
+	const signatureOptions: PublicSignatureOptions = {
+		message: 'channel-id',
+		id: 'youtube-market',
+		address: '0x12345',
+	}
+	const query: QueryData = {
+		publicSignature: 'dummy-publicSignature',
+		allData: { youtubeChannel: 'channel-id', account: '0x1234' } as any,
+		transactionhash: 'dummy-transaction-hash',
+	}
+	const data = await Promise.all([
+		oraclize({ signatureOptions, query, network: 'mainnet' }),
+	])
+	data.forEach((res) => {
+		t.is(res!.message, 'channel-id')
+		t.is(res!.status, 2)
+		t.is(res!.statusMessage, 'error: test1 = true, test2 = false')
+	})
+})
+
+test('Returns failure when the assert is not passed; different repo, different account', async (t) => {
+	const signatureOptions: PublicSignatureOptions = {
+		message: 'CHANNEL-ID',
+		id: 'youtube-market',
+		address: '0x12345',
+	}
+	const query: QueryData = {
+		publicSignature: 'dummy-publicSignature',
+		allData: { youtubeChannel: 'channel-id', account: '0x1234' } as any,
+		transactionhash: 'dummy-transaction-hash',
+	}
+	const data = await Promise.all([
+		oraclize({ signatureOptions, query, network: 'mainnet' }),
+	])
+	data.forEach((res) => {
+		t.is(res!.message, 'CHANNEL-ID')
+		t.is(res!.status, 2)
+		t.is(res!.statusMessage, 'error: test1 = false, test2 = false')
+	})
 })

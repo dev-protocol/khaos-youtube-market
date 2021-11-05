@@ -1,22 +1,80 @@
+/* eslint-disable functional/immutable-data */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable functional/no-let */
+/* eslint-disable functional/prefer-readonly-type */
 import test from 'ava'
+import sinon from 'sinon'
+import axios, { AxiosRequestConfig } from 'axios'
 import { authorize } from './authorize'
 
-test('Returns true if the passed message and secret are string type', async (t) => {
-	const res = await authorize({
-		message: 'test',
-		secret: 'test',
-		request: {} as any,
+let get: sinon.SinonStub<
+	[url: string, data?: any, config?: AxiosRequestConfig | undefined],
+	Promise<unknown>
+>
+
+let youtubeDataApiUrl: string
+
+test.before(() => {
+	get = sinon.stub(axios, 'get')
+	process.env.CHANNEL_ID = 'dummy-channel-id'
+	process.env.ACCESS_TOKEN = 'dummy-access-token'
+	youtubeDataApiUrl = `https://www.googleapis.com/youtube/v3/channels?part=id&mine=true&access_token=${process.env.ACCESS_TOKEN}`
+})
+
+test('Successful authentication.', async (t) => {
+	get.withArgs(youtubeDataApiUrl).resolves({
+		status: 200,
+		data: {
+			items: [{ id: process.env.CHANNEL_ID }],
+		},
 	})
+	const res = await authorize({
+		message: process.env.CHANNEL_ID,
+		secret: process.env.ACCESS_TOKEN,
+	} as any)
 	t.true(res)
 })
 
-test('Returns false if either the passed message or secret is not string type', async (t) => {
-	const [res1, res2, res3] = await Promise.all([
-		authorize({ message: 1 as any, secret: 'test', request: {} as any }),
-		authorize({ message: 'test', secret: 1 as any, request: {} as any }),
-		authorize({ message: 1 as any, secret: 1 as any, request: {} as any }),
-	])
-	t.false(res1)
-	t.false(res2)
-	t.false(res3)
+test('If the user does not send his channel id, the authentication fails.', async (t) => {
+	get.withArgs(youtubeDataApiUrl).resolves({
+		status: 200,
+		data: {
+			items: [{ id: process.env.CHANNEL_ID }],
+		},
+	})
+	const res = await authorize({
+		message: 'wrong-dummy-channel-id',
+		secret: process.env.ACCESS_TOKEN,
+	} as any)
+	t.false(res)
+})
+
+test('If the access token does not exist, the authentication fails', async (t) => {
+	const wrongToken = 'wrong-dummy-access-token'
+	youtubeDataApiUrl = `https://www.googleapis.com/youtube/v3/channels?part=id&mine=true&access_token=${wrongToken}`
+	get.withArgs(youtubeDataApiUrl).resolves({
+		status: 401,
+		data: {
+			error: {
+				code: 401,
+				message:
+					'Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.',
+				errors: [
+					{
+						message: 'Invalid Credentials',
+						domain: 'global',
+						reason: 'authError',
+						location: 'Authorization',
+						locationType: 'header',
+					},
+				],
+				status: 'UNAUTHENTICATED',
+			},
+		},
+	})
+	const res = await authorize({
+		message: process.env.CHANNEL_ID,
+		secret: 'wrong-dummy-access-token',
+	} as any)
+	t.false(res)
 })
