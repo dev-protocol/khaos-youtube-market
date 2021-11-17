@@ -8,7 +8,7 @@ test('Returns mainnet address when the passed network is mainnet', async (t) => 
 
 test('Returns ropsten address when the passed network is ropsten', async (t) => {
 	const res = await addresses({ network: 'ropsten' })
-	t.is(res, '0xA3CB10662F26d80b4F62E7893C6aD6df07987476')
+	t.is(res, '0xEd456cE8c099ec4862435B7ec5F2367d40017040')
 })
 
 test('Returns arbitrum rinkeby address when the passed network is arbitrum-rinkeby', async (t) => {
