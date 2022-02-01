@@ -18,5 +18,15 @@ test('Returns arbitrum rinkeby address when the passed network is arbitrum-rinke
 
 test('Returns undefined when the passed network is arbitrum-one', async (t) => {
 	const res = await addresses({ network: 'arbitrum-one' })
-	t.is(res, undefined)
+	t.is(res, '0x26f3DC14C3B87925cb518c55D9D8968B24Be0FE4')
+})
+
+test('Returns arbitrum rinkeby address when the passed network is polygon-mumbai', async (t) => {
+	const res = await addresses({ network: 'polygon-mumbai' })
+	t.is(res, '0x11DaCce8DBfe4c34e5e243FA9a8b12228424d4Bb')
+})
+
+test('Returns undefined when the passed network is polygon-mainnet', async (t) => {
+	const res = await addresses({ network: 'polygon-mainnet' })
+	t.is(res, '0xAEb8cE03Eb55A8fC0bAb96898df4A0C5e11dBEEC')
 })
