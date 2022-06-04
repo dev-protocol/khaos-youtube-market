@@ -3,7 +3,7 @@ import { addresses } from './addresses'
 
 test('Returns mainnet address when the passed network is mainnet', async (t) => {
 	const res = await addresses({ network: 'mainnet' })
-	t.is(res, undefined)
+	t.is(res, '0xf38c9627EC61c18977dfE7E53d78ACF56ddE753F')
 })
 
 test('Returns ropsten address when the passed network is ropsten', async (t) => {
